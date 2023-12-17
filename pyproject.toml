@@ -15,3 +15,6 @@ dead-link-detective = "detective.__main__:main"
 
 [tool.setuptools.dynamic]
 version = { attr = "detective.__version__" }
+
+[tool.flit.module]
+name = "detective"
