@@ -141,7 +141,7 @@ def argsetup():
     )
 
     # Create mutually exclusive group for synchronous and asynchronous requests
-    group = parser.add_mutually_exclusive_group()
+    group = parser.add_mutually_exclusive_group(required=True)
 
     # Add synchronous requests argument
     group.add_argument(
@@ -198,15 +198,15 @@ def main():
     try:
         args = argsetup()
 
-        if args.a or not args.sync:
+        if args.sync:
             start = time.perf_counter()
-            active, dead = asyncio.run(aworker(args.url, MAX_NUM_OF_COROUTINES))
+            active, dead = worker(args.url)
             end = time.perf_counter()
             write_results(args, active, dead, end - start)
 
         else:
             start = time.perf_counter()
-            active, dead = worker(args.url)
+            active, dead = asyncio.run(aworker(args.url, MAX_NUM_OF_COROUTINES))
             end = time.perf_counter()
             write_results(args, active, dead, end - start)
 
@@ -218,5 +218,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # Run the main function if the script is run directly
     main()
